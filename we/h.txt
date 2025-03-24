@@ -1,0 +1,69 @@
+#include <LPC17xx.H>
+int main(void)
+{
+	LPC_PINCON->PINSEL1 = 0x00000000;								
+	LPC_GPIO0->FIODIR = 0x03000000;									
+   while(1)
+   {
+				if(!(LPC_GPIO2->FIOPIN & 0x00000800))			
+				{
+					 LPC_GPIO0->FIOSET = 0x03000000;				
+				}	
+				else
+				{
+					 LPC_GPIO0->FIOCLR = 0x03000000;				
+				}
+	 }
+}																								
+
+
+
+#include <LPC17xx.h>
+
+unsigned int delay, count = 0, switchcount = 0, j;
+
+
+unsigned int Disp[16] = {
+    0x000003F0, 0x00000060, 0x000005B0, 0x000004F0,
+    0x00000660, 0x000006D0, 0x000007D0, 0x00000070,
+    0x000007F0, 0x000006F0, 0x00000770, 0x000007C0,
+    0x00000390, 0x000005E0, 0x00000790, 0x00000710
+};
+
+#define ALLDISP 0x00180000   
+#define DATAPORT 0x00000FF0  
+
+int main(void) {
+    
+    LPC_PINCON->PINSEL0 = 0x00000000;
+    LPC_PINCON->PINSEL1 = 0x00000000;
+    
+    
+    LPC_GPIO0->FIODIR = 0x00180FF0;  
+
+    while(1) {
+        
+        LPC_GPIO0->FIOSET = ALLDISP;
+        
+       
+        LPC_GPIO0->FIOCLR = DATAPORT;
+
+        
+        LPC_GPIO0->FIOSET = Disp[switchcount];
+
+        
+        for (j = 0; j < 3; j++) {
+            for (delay = 0; delay < 300000; delay++);
+        }
+
+        
+        switchcount++;
+
+        s
+        if (switchcount == 0x10) {
+            switchcount = 0;
+            // Clear all display-related bits
+            LPC_GPIO0->FIOCLR = 0x00180FF0;
+        }
+    }
+}
